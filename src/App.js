@@ -14,6 +14,7 @@ import Categoria from './components/Categoria';
 import Subcategoria from './components/Subcategoria';
 import ProductoDetalle from "./components/ProductoDetalle";
 import CarritoCompras from "./components/CarritoCompras";
+import Ofertas from "./components/ofertas";
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -29,6 +30,7 @@ function App() {
     const nuevoItem = {
       ...producto,
       idCarrito: Date.now(),
+      quantity: 1, // Añadimos cantidad por defecto
     };
     setCartItems((prev) => [...prev, nuevoItem]);
     toast.success("Producto agregado al carrito");
@@ -37,6 +39,19 @@ function App() {
   const eliminarDelCarrito = (idCarrito) => {
     const nuevoCarrito = cartItems.filter((item) => item.idCarrito !== idCarrito);
     setCartItems(nuevoCarrito);
+    toast.success("Producto eliminado del carrito");
+  };
+
+  // Nueva función para actualizar la cantidad
+  const actualizarCantidad = (idCarrito, nuevaCantidad) => {
+    if (nuevaCantidad < 1) {
+      eliminarDelCarrito(idCarrito);
+      return;
+    }
+
+    setCartItems(cartItems.map(item => 
+      item.idCarrito === idCarrito ? { ...item, quantity: nuevaCantidad } : item
+    ));
   };
 
   return (
@@ -66,7 +81,17 @@ function App() {
             <Route path="/categoria/:idCategoria" element={<Categoria agregarAlCarrito={agregarAlCarrito} />} />
             <Route path="/subcategoria/:idSubcategoria" element={<Subcategoria agregarAlCarrito={agregarAlCarrito} />} />
             <Route path="/producto/:idProducto" element={<ProductoDetalle agregarAlCarrito={agregarAlCarrito} />} />
-            <Route path="/carrito" element={<CarritoCompras />} />
+            <Route 
+              path="/carrito" 
+              element={
+                <CarritoCompras 
+                  cartItems={cartItems}
+                  eliminarDelCarrito={eliminarDelCarrito}
+                  actualizarCantidad={actualizarCantidad}
+                />
+              } 
+            />
+            <Route path="/ofertas" element={<Ofertas agregarAlCarrito={agregarAlCarrito} />} />
           </Routes>
         </main>
 
