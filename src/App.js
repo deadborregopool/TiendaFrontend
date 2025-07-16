@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import './App.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -6,7 +6,7 @@ import Banner from './components/Banner';
 import NuevoStock from './components/NuevoStock';
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import SoporteTecnico from './components/SoporteTecnico';
 import Nosotros from "./components/Nosotros";
 import Busqueda from "./components/Busqueda";
@@ -15,6 +15,17 @@ import Subcategoria from './components/Subcategoria';
 import ProductoDetalle from "./components/ProductoDetalle";
 import CarritoCompras from "./components/CarritoCompras";
 import Ofertas from "./components/ofertas";
+
+// Componente auxiliar para manejar el scroll
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 function App() {
   const [cartItems, setCartItems] = useState(() => {
@@ -30,7 +41,7 @@ function App() {
     const nuevoItem = {
       ...producto,
       idCarrito: Date.now(),
-      quantity: 1, // Añadimos cantidad por defecto
+      quantity: 1,
     };
     setCartItems((prev) => [...prev, nuevoItem]);
     toast.success("Producto agregado al carrito");
@@ -42,7 +53,6 @@ function App() {
     toast.success("Producto eliminado del carrito");
   };
 
-  // Nueva función para actualizar la cantidad
   const actualizarCantidad = (idCarrito, nuevaCantidad) => {
     if (nuevaCantidad < 1) {
       eliminarDelCarrito(idCarrito);
@@ -63,8 +73,8 @@ function App() {
           eliminarDelCarrito={eliminarDelCarrito}
         />
 
-        {/* Main dinámico que empuja el footer abajo */}
         <main className="flex-grow">
+          <ScrollToTop /> {/* Componente que restablece el scroll */}
           <Routes>
             <Route
               path="/"
