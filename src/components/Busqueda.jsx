@@ -17,7 +17,7 @@ const Busqueda = ({ agregarAlCarrito }) => {
 
     setLoading(true);
     setError(null);
-    fetch(`https://tienda-kxep.onrender.com/api/productos/filtrar/nombre?term=${termino}`)
+    fetch(`https://tienda-kxep.onrender.com/api/productos/buscar?term=${termino}`)
       .then(res => {
         if (!res.ok) throw new Error("Error en la búsqueda");
         return res.json();
