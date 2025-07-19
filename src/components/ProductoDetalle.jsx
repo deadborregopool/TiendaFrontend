@@ -1,6 +1,5 @@
-// src/components/ProductoDetalle.jsx
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Thumbs, FreeMode } from 'swiper/modules';
 import 'swiper/css';
@@ -12,6 +11,7 @@ import { FaWhatsapp, FaCartPlus, FaTruck, FaShieldAlt, FaUndo, FaStar, FaChevron
 
 const ProductoDetalle = ({ agregarAlCarrito }) => {
   const { idProducto } = useParams();
+  const location = useLocation();
   const [producto, setProducto] = useState(null);
   const [recomendados, setRecomendados] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,11 +19,32 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
   const [error, setError] = useState(null);
   const mainSwiperRef = useRef(null);
   const thumbsSwiperRef = useRef(null);
+  const prevIdRef = useRef(null);
+  const [loadedImages, setLoadedImages] = useState({});
 
   useEffect(() => {
+    // Solo cargar si el ID realmente cambió
+    if (prevIdRef.current === idProducto) return;
+    
     setLoading(true);
     setError(null);
+    setProducto(null);
+    setRecomendados([]);
+    setLoadedImages({});
     
+    // Resetear los Swipers
+    if (mainSwiperRef.current && mainSwiperRef.current.swiper) {
+      mainSwiperRef.current.swiper.destroy(true, true);
+    }
+    if (thumbsSwiperRef.current && thumbsSwiperRef.current.swiper) {
+      thumbsSwiperRef.current.swiper.destroy(true, true);
+    }
+    setThumbsSwiper(null);
+
+    // Guardar el ID actual para comparación futura
+    prevIdRef.current = idProducto;
+
+    // Cargar datos del producto
     fetch(`https://tienda-kxep.onrender.com/api/productos/${idProducto}`)
       .then(res => {
         if (!res.ok) throw new Error("Producto no encontrado");
@@ -40,9 +61,28 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
         setError(error.message);
       })
       .finally(() => setLoading(false));
-  }, [idProducto]);
+  }, [idProducto, location.key]); // Usar location.key para forzar recarga
 
-  if (loading) {
+  // Efecto para reiniciar los Swipers cuando cambian las imágenes
+  useEffect(() => {
+    if (!producto || !producto.imagenes || producto.imagenes.length === 0) return;
+    
+    // Forzar recreación de Swipers
+    setTimeout(() => {
+      if (mainSwiperRef.current && mainSwiperRef.current.swiper) {
+        mainSwiperRef.current.swiper.update();
+      }
+      if (thumbsSwiperRef.current && thumbsSwiperRef.current.swiper) {
+        thumbsSwiperRef.current.swiper.update();
+      }
+    }, 100);
+  }, [producto?.imagenes]);
+
+  const handleImageLoad = (index) => {
+    setLoadedImages(prev => ({ ...prev, [index]: true }));
+  };
+
+  if (loading && !producto) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="animate-pulse">
@@ -118,6 +158,7 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
           {/* Imagen principal sin botones */}
           <div className="mb-4 rounded-xl overflow-hidden bg-white shadow-lg">
             <Swiper
+              key={`main-${producto.id}-${imagenes.length}`}
               ref={mainSwiperRef}
               modules={[Thumbs]}
               thumbs={{ swiper: thumbsSwiper }}
@@ -129,8 +170,12 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
                   <img
                     src={img}
                     alt={`Imagen ${index + 1} de ${producto.nombre}`}
-                    className="w-full h-full object-contain"
-                    onError={(e) => (e.target.src = "/no-image.jpg")}
+                    className={`w-full h-full object-contain transition-opacity duration-300 ${loadedImages[index] ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => handleImageLoad(index)}
+                    onError={(e) => {
+                      e.target.src = "/no-image.jpg";
+                      handleImageLoad(index);
+                    }}
                   />
                 </SwiperSlide>
               ))}
@@ -140,6 +185,7 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
           {/* Miniaturas */}
           <div className="mt-4">
             <Swiper
+              key={`thumbs-${producto.id}-${imagenes.length}`}
               ref={thumbsSwiperRef}
               modules={[FreeMode, Thumbs]}
               onSwiper={setThumbsSwiper}
@@ -338,6 +384,7 @@ const ProductoDetalle = ({ agregarAlCarrito }) => {
           
           <div className="relative">
             <Swiper
+              key={`recomendados-${recomendados.length}`}
               modules={[Navigation]}
               navigation={{
                 nextEl: '.custom-next-recomendados',
