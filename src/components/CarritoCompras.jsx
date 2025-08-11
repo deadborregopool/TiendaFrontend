@@ -1,18 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaWhatsapp, FaTrash, FaArrowLeft, FaPlus, FaMinus } from "react-icons/fa";
+import { FaWhatsapp, FaTrash, FaArrowLeft } from "react-icons/fa";
 
-const CarritoCompras = ({ cartItems, eliminarDelCarrito, actualizarCantidad }) => {
+const CarritoCompras = ({ cartItems, eliminarDelCarrito }) => {
   const total = cartItems.reduce((acc, item) => {
-    const quantity = item.quantity || 1;
-    return acc + (parseFloat(item.precio || 0) * quantity);
+    return acc + parseFloat(item.precio || 0);
   }, 0);
 
   const generarMensajeWhatsApp = () => {
     const base = "https://wa.me/51960936246?text="; 
     const productos = cartItems.map((item, i) => {
-      const quantity = item.quantity || 1;
-      return `${i + 1}. ${item.nombre} - Cantidad: ${quantity} - S/ ${(parseFloat(item.precio) * quantity).toFixed(2)}`;
+      return `${i + 1}. ${item.nombre} - S/ ${parseFloat(item.precio).toFixed(2)}`;
     }).join("%0A");
     
     const mensaje = `Hola, deseo consultar sobre estos productos:%0A%0A${productos}%0A%0ATotal: S/ ${total.toFixed(2)}`;
@@ -56,21 +54,17 @@ const CarritoCompras = ({ cartItems, eliminarDelCarrito, actualizarCantidad }) =
             <div className="lg:col-span-2 bg-white rounded-xl shadow overflow-hidden">
               <div className="border-b border-gray-200">
                 <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 text-gray-600 font-medium">
-                  <div className="col-span-5">Producto</div>
-                  <div className="col-span-2 text-center">Precio</div>
-                  <div className="col-span-3 text-center">Cantidad</div>
-                  <div className="col-span-2 text-center">Subtotal</div>
+                  <div className="col-span-6">Producto</div>
+                  <div className="col-span-3 text-center">Precio</div>
+                  <div className="col-span-3 text-center">Acciones</div>
                 </div>
               </div>
               
               <div className="divide-y divide-gray-100">
                 {cartItems.map((item) => {
-                  const quantity = item.quantity || 1;
-                  const subtotal = (parseFloat(item.precio) * quantity).toFixed(2);
-                  
                   return (
                     <div key={item.idCarrito} className="grid grid-cols-12 gap-4 px-6 py-5 items-center">
-                      <div className="col-span-5 flex items-center">
+                      <div className="col-span-6 flex items-center">
                         <img
                           src={item.imagenes?.[0] || "/no-image.jpg"}
                           alt={item.nombre}
@@ -82,35 +76,17 @@ const CarritoCompras = ({ cartItems, eliminarDelCarrito, actualizarCantidad }) =
                         </div>
                       </div>
                       
-                      <div className="col-span-2 text-center text-gray-700">
+                      <div className="col-span-3 text-center text-gray-700">
                         S/ {parseFloat(item.precio).toFixed(2)}
                       </div>
                       
-                      <div className="col-span-3 flex justify-center">
-                        <div className="flex items-center border rounded-lg">
-                          <button 
-                            className="px-3 py-1 text-gray-600 hover:bg-gray-100"
-                            onClick={() => actualizarCantidad(item.idCarrito, quantity - 1)}
-                          >
-                            <FaMinus />
-                          </button>
-                          <span className="px-4 py-1">{quantity}</span>
-                          <button 
-                            className="px-3 py-1 text-gray-600 hover:bg-gray-100"
-                            onClick={() => actualizarCantidad(item.idCarrito, quantity + 1)}
-                          >
-                            <FaPlus />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="col-span-2 flex items-center justify-center">
-                        <span className="font-medium text-gray-800 mr-2">S/ {subtotal}</span>
+                      <div className="col-span-3 flex items-center justify-center">
                         <button 
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 flex items-center"
                           onClick={() => eliminarDelCarrito(item.idCarrito)}
                         >
-                          <FaTrash />
+                          <FaTrash className="mr-1" />
+                          Eliminar
                         </button>
                       </div>
                     </div>
