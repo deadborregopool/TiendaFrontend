@@ -240,7 +240,7 @@ const Nosotros = () => {
                 </svg>
                 <div>
                   <h4 className="font-bold text-green-200">Ubicación</h4>
-                  <p>Urb. San Isidro, Mza "S" Lote N°11 - Tercera etapa</p>
+                  <p>Av. Atahualpa, Casa Grande 13761</p>
                 </div>
               </div>
               
@@ -304,7 +304,7 @@ const Nosotros = () => {
               <div className="h-1/2">
                 <iframe
                   className="w-full h-full"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6278.760097234924!2d-79.01362520832873!3d-8.107279867738745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91ad3d9000000001%3A0x26d3e2047e8413b9!2sCompumarket%20Corporation!5e0!3m2!1ses-419!2spe!4v1715998552059!5m2!1ses-419!2spe"
+                  src="https://maps.google.com/maps?width=100%&height=200&hl=es&q=Av.+Atahualpa,+Casa+Grande+13761+(Ubicación)&ie=UTF8&t=&z=17&iwloc=B&output=embed"
                   loading="lazy"
                 ></iframe>
               </div>

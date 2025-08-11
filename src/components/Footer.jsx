@@ -61,11 +61,11 @@ const Footer = () => {
                 </li>
                 <li>
                   <a 
-                    href="/productos" 
+                    href="/soporte-tecnico" 
                     className="flex items-center hover:text-green-300 transition-colors group"
                   >
                     <span className="w-2 h-2 bg-green-400 rounded-full mr-3 group-hover:animate-pulse"></span>
-                    Productos/Servicios Técnicos
+                    Soporte Tecnico
                   </a>
                 </li>
                 <li>
@@ -79,11 +79,11 @@ const Footer = () => {
                 </li>
                 <li>
                   <a 
-                    href="/contacto" 
+                    href="/nosotros" 
                     className="flex items-center hover:text-green-300 transition-colors group"
                   >
                     <span className="w-2 h-2 bg-green-400 rounded-full mr-3 group-hover:animate-pulse"></span>
-                    Contacto
+                    Sobre Nosotros
                   </a>
                 </li>
               </ul>
@@ -102,7 +102,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Dirección:</p>
-                    <p className="text-blue-100">Urb. San Isidro Mza “S” Lote N°11 - 1era etapa</p>
+                    <p className="text-blue-100">Av. Atahualpa, Casa Grande 13761</p>
                   </div>
                 </div>
                 
@@ -112,7 +112,7 @@ const Footer = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Teléfono:</p>
-                    <p className="text-blue-100">044-22155</p>
+                    <p className="text-blue-100">044-433399</p>
                   </div>
                 </div>
                 
@@ -138,7 +138,7 @@ const Footer = () => {
                     scrolling="no"
                     marginHeight="0"
                     marginWidth="0"
-                    src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=2880%20Broadway,%20New%20York+(CompuMarket)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
+                    src="https://maps.google.com/maps?width=100%&height=200&hl=es&q=Av.+Atahualpa,+Casa+Grande+13761+(Ubicación)&ie=UTF8&t=&z=17&iwloc=B&output=embed"
                     style={{ border: 0 }}
                     allowFullScreen
                   ></iframe>

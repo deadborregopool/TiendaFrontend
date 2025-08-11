@@ -3,20 +3,24 @@ import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import React from "react";
+import { Link } from 'react-router-dom'; // Importa Link de react-router-dom
 
 const Banner = () => {
   const banners = [
     {
       imagen: "/banner1.jpg",
       titulo: "Vastec Slim Business",
+      url: "/ofertas"  // Ruta específica
     },
     {
-      imagen: "/banner2.jpg",
+      imagen: "/banner2.png",
       titulo: "Monitor LG 27''",
+      url: "/categoria/1"
     },
     {
       imagen: "/banner3.jpg",
       titulo: "Accesorios Gamer",
+      url: "/soporte-tecnico"
     }
   ];
 
@@ -40,14 +44,17 @@ const Banner = () => {
           className="banner-swiper rounded-xl overflow-hidden shadow-xl"
         >
           {banners.map((item, index) => (
-            <SwiperSlide key={index} className="h-[500px]">
-              <div 
-                className="w-full h-full bg-cover bg-center"
-                style={{ backgroundImage: `url(${item.imagen})` }}
-                aria-label={item.titulo}
+            <SwiperSlide key={index} className="h-[500px] cursor-pointer">
+              <Link 
+                to={item.url} 
+                className="block w-full h-full group"
+                aria-label={`Ir a ${item.titulo}`}
               >
-                {/* Contenedor vacío - solo imagen de fondo */}
-              </div>
+                <div 
+                  className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${item.imagen})` }}
+                />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

@@ -138,10 +138,7 @@ const NuevoStock = ({ agregarAlCarrito }) => {
                             slidesPerView: 3, 
                             slidesPerGroup: 3 
                         },
-                        1280: {
-                            slidesPerView: 4,
-                            slidesPerGroup: 4
-                        }
+                    
                     }}
                 >
                     {loading ? renderSkeletons() : (
